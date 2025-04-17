@@ -1247,6 +1247,7 @@ def _normalize_pickle(o: object) -> tuple:
             buffers.clear()
             try:
                 out = mod.dumps(o, protocol=5, buffer_callback=buffers.append)
+                tmp = mod.loads(out, buffers=buffers)
                 pik2 = hash_buffer_hex(out)
             except Exception:
                 break
