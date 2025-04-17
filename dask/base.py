@@ -1236,17 +1236,19 @@ def _normalize_pure_object(o: object) -> tuple[str, int]:
     _seen_objects.add(o)
     return "object", id(o)
 
-
+import sys
 def _normalize_pickle(o: object) -> tuple:
     buffers: list[pickle.PickleBuffer] = []
     pik: int | None = None
     pik2: int
 
+    print("++++++++++++++++++++ type: ", type(o), "object: ", o)
     for mod in [pickle, cloudpickle]:
         for _ in range(3):
             buffers.clear()
             try:
                 out = mod.dumps(o, protocol=5, buffer_callback=buffers.append)
+                print("++++++++++++++++++++ size: ", sys.getsizeof(out))
                 pik2 = hash_buffer_hex(out)
             except Exception:
                 break
